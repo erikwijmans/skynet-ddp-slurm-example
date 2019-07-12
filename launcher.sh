@@ -3,8 +3,9 @@
 #SBATCH --output=logs.out
 #SBATCH --error=logs.err
 #SBATCH --gres gpu:2
-#SBATCH --nodes 2
+#SBATCH --nodes 1
 #SBATCH --ntasks-per-node 2
+#SBATCH --partition=short
 
 
 export MASTER_ADDR=$(srun --ntasks=1 hostname 2>&1 | tail -n1)

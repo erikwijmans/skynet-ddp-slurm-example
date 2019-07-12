@@ -9,7 +9,7 @@ from ddp_example.ddp_utils import convert_groupnorm_model, init_distrib_slurm
 
 BATCH_SIZE = 128
 LR = 1e-2
-WD = 1e-3
+WD = 5e-3
 
 
 def train_epoch(model, optimizer, dloader, epoch):
@@ -124,6 +124,8 @@ def main():
     for epoch in range(50):
         train_epoch(model, optimizer, train_loader, epoch)
         eval_epoch(model, val_loader)
+
+        train_loader.sampler.set_epoch(epoch)
 
 
 if __name__ == "__main__":

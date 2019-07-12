@@ -11,3 +11,7 @@ bash launcher.sh
 ```
 sbatch launcher.sh
 ```
+
+
+You can change the number of GPUs and number of nodes to whatever suits your fancy, but make sure that `--ntasks-per-node` is always
+set to the number of GPUs you reservered.

@@ -1,9 +1,25 @@
 import os
+import signal
+import threading
 
 import ifcfg
 import torch
 import torch.distributed as distrib
 import torch.nn as nn
+
+
+EXIT = threading.Event()
+EXIT.clear()
+
+
+def _clean_exit_handler(signum, frame):
+    EXIT.set()
+    print("Exiting cleanly", flush=True)
+
+
+signal.signal(signal.SIGINT, _clean_exit_handler)
+signal.signal(signal.SIGTERM, _clean_exit_handler)
+signal.signal(signal.SIGUSR2, _clean_exit_handler)
 
 
 def get_ifname():

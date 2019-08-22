@@ -5,7 +5,7 @@ import torchvision
 import torchvision.transforms as T
 import tqdm
 
-from ddp_example.ddp_utils import convert_groupnorm_model, init_distrib_slurm
+from ddp_example.ddp_utils import convert_groupnorm_model, init_distrib_slurm, EXIT
 
 BATCH_SIZE = 128
 LR = 1e-2
@@ -30,6 +30,9 @@ def train_epoch(model, optimizer, dloader, epoch):
         train_stats[0] += loss
         train_stats[1] += (torch.argmax(logits, -1) == y).float().sum()
         train_stats[2] += x.size(0)
+
+        if EXIT.is_set():
+            return
 
     distrib.all_reduce(train_stats)
 
@@ -58,6 +61,9 @@ def eval_epoch(model, dloader):
         eval_stats[0] += loss
         eval_stats[1] += (torch.argmax(logits, -1) == y).float().sum()
         eval_stats[2] += x.size(0)
+
+        if EXIT.is_set():
+            return
 
     distrib.all_reduce(eval_stats)
 
@@ -126,6 +132,9 @@ def main():
         eval_epoch(model, val_loader)
 
         train_loader.sampler.set_epoch(epoch)
+
+        if EXIT.is_set():
+            return
 
 
 if __name__ == "__main__":

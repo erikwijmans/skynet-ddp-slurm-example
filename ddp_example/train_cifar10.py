@@ -77,7 +77,7 @@ def eval_epoch(model, dloader):
 
 
 def main():
-    local_rank, _ = init_distrib_slurm(backend="nccl")
+    local_rank, _ = init_distrib_slurm(backend="gloo")
     world_rank = distrib.get_rank()
     world_size = distrib.get_world_size()
 

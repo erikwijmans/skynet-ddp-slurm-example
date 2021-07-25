@@ -17,7 +17,7 @@ You can change the number of processes (tasks) and number of nodes to whatever s
 
 
 You can run on more than 1 nodes by setting `--nodes` to some value greater than 1.
-Ideally, you shouldn't use multiple nodes until you need >8 GPUs.
+Ideally, you shouldn't use multiple nodes until you need >8 GPUs.  Note that while multi-node does work on skynet, the interconnect between nodes is quite slow (10 gig ethernet -- while that may sound fast, "fast" interconnects by HPC standards are 400+ gig infiniband), so 2 nodes may be slower than 1. 
 
 
 ## Some warnings about NCCL

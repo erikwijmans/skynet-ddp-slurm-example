@@ -4,7 +4,7 @@
 Two ways to run this:
 
 ```
-salloc --ntasks-per-node=2 --gres=gpu:2 --nodes=1 bash -l
+salloc --ntasks-per-node=2 --gpus-per-task=1 --nodes=1 bash -l
 bash launcher.sh
 ```
 
@@ -13,8 +13,7 @@ sbatch launcher.sh
 ```
 
 
-You can change the number of GPUs and number of nodes to whatever suits your fancy, but make sure that `--ntasks-per-node` is always
-set to the number of GPUs you reservered.
+You can change the number of processes (tasks) and number of nodes to whatever suits your fancy.  Slurm will always give you 1 GPU per process thanks to `--gpus-per-task=1`
 
 
 You can run on more than 1 nodes by setting `--nodes` to some value greater than 1.
@@ -22,6 +21,8 @@ Ideally, you shouldn't use multiple nodes until you need >8 GPUs.
 
 
 ## Some warnings about NCCL
+
+**Update**: More recent versions of NCCL have the ability to monitor themselves and not spin forever.  When debugging, do `export NCCL_BLOCKING_WAIT=1` or `export NCCL_ASYNC_ERROR_HANDLING=1`.  The latter has a much lower performance overhead but makes crashes more opaque.
 
 [NCCL](https://developer.nvidia.com/nccl) is the workhorse responsible for averaging the gradients between all the different processes
 and it is really quite fast and scales incredibly well.  However, NCCL has an interesting design choice: it has no timeout functionality.
